@@ -517,6 +517,16 @@ public class ClinicaSyncDashboard extends JFrame {
         JPanel card = new BentoCard();
         card.setLayout(new BorderLayout());
 
+
+
+        // Table
+        String[] columns = {"No.", "Nama Pasien", "Waktu Masuk", "Estimasi Tunggu", "Status"};
+        Object[][] data = {
+            {"#01", "Sarah Connor",  "08:45 AM", "0 menit",   "Siap"},
+            {"#02", "James Smith",   "08:52 AM", "12 menit",  "Tiba"},
+            {"#03", "Ellen Ripley",  "09:10 AM", "25 menit",  "Menunggu"},
+            {"#04", "Max Mad",       "09:15 AM", "40 menit",  "Menunggu"},
+        };
         // Header
         JPanel header = new JPanel(new BorderLayout());
         header.setOpaque(false);
@@ -524,7 +534,7 @@ public class ClinicaSyncDashboard extends JFrame {
             new MatteBorder(0, 0, 1, 0, new Color(255, 255, 255, 120)),
             BorderFactory.createEmptyBorder(14, 18, 14, 18)
         ));
-        JLabel title = new JLabel("📋  Pemantau Antrean Real-Time");
+        JLabel title = new JLabel("📋  Monitor Antrean");
         title.setFont(new Font(F_HEADLINE_MD.getFamily(), Font.BOLD, 16));
         title.setForeground(C_ON_SURFACE);
 
@@ -546,18 +556,10 @@ public class ClinicaSyncDashboard extends JFrame {
         });
         blink.start();
 
-        header.add(title, BorderLayout.WEST);
+        header.add(title, BorderLayout.CENTER);
         header.add(liveTag, BorderLayout.EAST);
         card.add(header, BorderLayout.NORTH);
 
-        // Table
-        String[] columns = {"No.", "Nama Pasien", "Waktu Masuk", "Estimasi Tunggu", "Status"};
-        Object[][] data = {
-            {"#01", "Sarah Connor",  "08:45 AM", "0 menit",   "Siap"},
-            {"#02", "James Smith",   "08:52 AM", "12 menit",  "Tiba"},
-            {"#03", "Ellen Ripley",  "09:10 AM", "25 menit",  "Menunggu"},
-            {"#04", "Max Mad",       "09:15 AM", "40 menit",  "Menunggu"},
-        };
         JTable table = new JTable(data, columns) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
             @Override public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
