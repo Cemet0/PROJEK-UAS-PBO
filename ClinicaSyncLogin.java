@@ -154,9 +154,9 @@ public class ClinicaSyncLogin extends JFrame {
 
         // Info cards
         String[][] features = {
-            {"🔒", "Kepatuhan HIPAA", "Data terenkripsi secara end-to-end"},
-            {"📋", "Sinkronisasi Real-time",  "Pembaruan rekam medis pasien secara langsung"},
-            {"👥", "Multi-Peran",      "Admin, Dokter, Perawat, Apoteker"}
+            {"🔒", "Standar Keamanan HIPAA", "Enkripsi data medis ujung-ke-ujung (end-to-end)"},
+            {"📋", "Sinkronisasi Real-Time", "Pembaruan rekam medis pasien secara instan"},
+            {"👥", "Kolaborasi Multi-Peran", "Akses terintegrasi untuk Admin, Dokter, Perawat, & Apoteker"}
         };
         for (String[] f : features) {
             panel.add(buildFeatureRow(f[0], f[1], f[2]));
