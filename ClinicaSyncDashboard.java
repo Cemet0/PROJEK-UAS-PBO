@@ -74,15 +74,14 @@ public class ClinicaSyncDashboard extends JFrame {
     // Root UI
     // =========================================================
     private void initUI() {
-        setTitle("ClinicaSync - Doctor Dashboard");
+        setTitle("ClinicaSync - Dasbor Dokter");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setMinimumSize(new Dimension(1100, 700));
         setPreferredSize(new Dimension(1300, 780));
-        getContentPane().setBackground(C_BACKGROUND);
 
-        // Layout: Sidebar kiri + Main kanan (menggunakan JSplitPane agar responsif)
-        JPanel root = new JPanel(new BorderLayout());
-        root.setBackground(C_BACKGROUND);
+        // Root panel menggunakan Fluid Background
+        FluidBackgroundPanel root = new FluidBackgroundPanel();
+        root.setLayout(new BorderLayout());
         root.add(buildSidebar(),  BorderLayout.WEST);
         root.add(buildMainArea(), BorderLayout.CENTER);
 
@@ -95,6 +94,9 @@ public class ClinicaSyncDashboard extends JFrame {
 
         JPanel chatOverlay = buildChatOverlay();
         chatOverlay.setOpaque(false);
+        chatOverlay.setAlignmentX(0f);
+        chatOverlay.setAlignmentY(0f);
+        chatOverlay.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
         layered.add(chatOverlay, JLayeredPane.POPUP_LAYER);
 
         setContentPane(layered);
@@ -106,12 +108,21 @@ public class ClinicaSyncDashboard extends JFrame {
     // SIDEBAR
     // =========================================================
     private JPanel buildSidebar() {
-        JPanel sidebar = new JPanel();
+        JPanel sidebar = new JPanel() {
+            @Override protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(new Color(255, 255, 255, 100)); // Frosty glass sidebar
+                g2.fillRect(0, 0, getWidth(), getHeight());
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
-        sidebar.setBackground(C_SURFACE_CONT_LOW);
+        sidebar.setOpaque(false);
         sidebar.setPreferredSize(new Dimension(220, Integer.MAX_VALUE));
         sidebar.setBorder(new CompoundBorder(
-            new MatteBorder(0, 0, 0, 1, C_OUTLINE_VAR),
+            new MatteBorder(0, 0, 0, 1, new Color(255, 255, 255, 120)), // Light glass border
             BorderFactory.createEmptyBorder(20, 12, 16, 12)
         ));
 
@@ -138,10 +149,10 @@ public class ClinicaSyncDashboard extends JFrame {
         JPanel logoText = new JPanel();
         logoText.setOpaque(false);
         logoText.setLayout(new BoxLayout(logoText, BoxLayout.Y_AXIS));
-        JLabel clinicName = new JLabel("Main Clinic");
+        JLabel clinicName = new JLabel("Klinik Utama");
         clinicName.setFont(new Font(F_HEADLINE_MD.getFamily(), Font.BOLD, 15));
         clinicName.setForeground(C_ON_SURFACE);
-        JLabel clinicRole = new JLabel("Administrator Access");
+        JLabel clinicRole = new JLabel("Akses Administrator");
         clinicRole.setFont(F_LABEL_SM);
         clinicRole.setForeground(C_ON_SURFACE_VAR);
         logoText.add(clinicName);
@@ -154,13 +165,13 @@ public class ClinicaSyncDashboard extends JFrame {
 
         // Nav items
         String[][] navItems = {
-            {"📊", "Dashboard",   "true"},
-            {"👤", "Patients",    "false"},
-            {"📅", "Scheduling",  "false"},
-            {"📋", "Queue",       "false"},
-            {"💊", "Pharmacy",    "false"},
-            {"💳", "Billing",     "false"},
-            {"📈", "Analytics",   "false"},
+            {"📊", "Dasbor",       "true"},
+            {"👤", "Pasien",        "false"},
+            {"📅", "Penjadwalan",  "false"},
+            {"📋", "Antrean",       "false"},
+            {"💊", "Farmasi",      "false"},
+            {"💳", "Tagihan",      "false"},
+            {"📈", "Analisis",     "false"},
         };
         for (String[] item : navItems) {
             sidebar.add(buildNavItem(item[0], item[1], "true".equals(item[2])));
@@ -171,22 +182,22 @@ public class ClinicaSyncDashboard extends JFrame {
 
         // Bottom divider
         JSeparator sep = new JSeparator();
-        sep.setForeground(C_OUTLINE_VAR);
+        sep.setForeground(new Color(255, 255, 255, 120));
         sep.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
         sidebar.add(sep);
         sidebar.add(Box.createVerticalStrut(10));
 
         // New Registration button
-        JButton newRegBtn = createPillButton("+ New Registration", C_PRIMARY, Color.WHITE);
+        JButton newRegBtn = createPillButton("+ Registrasi Baru", C_PRIMARY, Color.WHITE);
         newRegBtn.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
         newRegBtn.setAlignmentX(Component.LEFT_ALIGNMENT);
         sidebar.add(newRegBtn);
         sidebar.add(Box.createVerticalStrut(6));
 
         // AI + Settings
-        sidebar.add(buildNavItem("🤖", "AI Assistant", false));
+        sidebar.add(buildNavItem("🤖", "Asisten AI", false));
         sidebar.add(Box.createVerticalStrut(2));
-        sidebar.add(buildNavItem("⚙", "Settings", false));
+        sidebar.add(buildNavItem("⚙", "Pengaturan", false));
 
         return sidebar;
     }
@@ -197,15 +208,14 @@ public class ClinicaSyncDashboard extends JFrame {
                 if (active) {
                     Graphics2D g2 = (Graphics2D) g.create();
                     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                    g2.setColor(C_PRIMARY_CONT);
+                    g2.setColor(new Color(0xf6, 0x72, 0x80, 200)); // Semi-transparent glass active color
                     g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
                     g2.dispose();
                 }
                 super.paintComponent(g);
             }
         };
-        item.setOpaque(!active);
-        if (!active) item.setBackground(C_SURFACE_CONT_LOW);
+        item.setOpaque(false);
         item.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
         item.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
@@ -220,8 +230,8 @@ public class ClinicaSyncDashboard extends JFrame {
 
         if (!active) {
             item.addMouseListener(new MouseAdapter() {
-                @Override public void mouseEntered(MouseEvent e) { item.setBackground(C_SURFACE_HIGH); item.setOpaque(true); item.repaint(); }
-                @Override public void mouseExited (MouseEvent e) { item.setBackground(C_SURFACE_CONT_LOW); item.repaint(); }
+                @Override public void mouseEntered(MouseEvent e) { item.setBackground(new Color(255, 255, 255, 120)); item.setOpaque(true); item.repaint(); }
+                @Override public void mouseExited (MouseEvent e) { item.setOpaque(false); item.repaint(); }
             });
         }
         return item;
@@ -232,7 +242,7 @@ public class ClinicaSyncDashboard extends JFrame {
     // =========================================================
     private JPanel buildMainArea() {
         JPanel main = new JPanel(new BorderLayout());
-        main.setBackground(C_BACKGROUND);
+        main.setOpaque(false);
         main.add(buildTopBar(),       BorderLayout.NORTH);
         main.add(buildDashboard(),    BorderLayout.CENTER);
         return main;
@@ -240,11 +250,20 @@ public class ClinicaSyncDashboard extends JFrame {
 
     // ---- TOP BAR ----
     private JPanel buildTopBar() {
-        JPanel bar = new JPanel(new BorderLayout());
-        bar.setBackground(C_SURFACE);
+        JPanel bar = new JPanel(new BorderLayout()) {
+            @Override protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(new Color(255, 255, 255, 120)); // Frosty glass top bar
+                g2.fillRect(0, 0, getWidth(), getHeight());
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        bar.setOpaque(false);
         bar.setPreferredSize(new Dimension(Integer.MAX_VALUE, 58));
         bar.setBorder(new CompoundBorder(
-            new MatteBorder(0, 0, 1, 0, C_OUTLINE_VAR),
+            new MatteBorder(0, 0, 1, 0, new Color(255, 255, 255, 120)), // Light glass border
             BorderFactory.createEmptyBorder(0, 28, 0, 28)
         ));
 
@@ -256,8 +275,9 @@ public class ClinicaSyncDashboard extends JFrame {
         title.setForeground(C_PRIMARY);
 
         JPanel searchBox = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 6));
-        searchBox.setBackground(C_SURFACE_CONT_LOW);
-        searchBox.setBorder(new RoundedBorder(C_OUTLINE_VAR, 1, 20));
+        searchBox.setOpaque(false);
+        searchBox.setBackground(new Color(255, 255, 255, 100)); // Glassy search box
+        searchBox.setBorder(new RoundedBorder(new Color(255, 255, 255, 180), 1, 20));
         searchBox.setPreferredSize(new Dimension(320, 34));
         JLabel searchIco = new JLabel("🔍");
         searchIco.setFont(new Font("SansSerif", Font.PLAIN, 13));
@@ -268,14 +288,14 @@ public class ClinicaSyncDashboard extends JFrame {
         searchField.setBorder(BorderFactory.createEmptyBorder());
         searchField.setBackground(new Color(0,0,0,0));
         // Placeholder trick
-        searchField.setText("Search patients, records or appointments...");
+        searchField.setText("Cari pasien, rekam medis, atau janji temu...");
         searchField.setForeground(C_ON_SURFACE_VAR);
         searchField.addFocusListener(new FocusAdapter() {
             @Override public void focusGained(FocusEvent e) {
-                if (searchField.getText().startsWith("Search")) { searchField.setText(""); searchField.setForeground(C_ON_SURFACE); }
+                if (searchField.getText().startsWith("Cari")) { searchField.setText(""); searchField.setForeground(C_ON_SURFACE); }
             }
             @Override public void focusLost(FocusEvent e) {
-                if (searchField.getText().isEmpty()) { searchField.setText("Search patients, records or appointments..."); searchField.setForeground(C_ON_SURFACE_VAR); }
+                if (searchField.getText().isEmpty()) { searchField.setText("Cari pasien, rekam medis, atau janji temu..."); searchField.setForeground(C_ON_SURFACE_VAR); }
             }
         });
         searchBox.add(searchIco);
@@ -296,7 +316,7 @@ public class ClinicaSyncDashboard extends JFrame {
         JLabel userName = new JLabel("Dr. Julianne Moore");
         userName.setFont(F_LABEL_MD);
         userName.setForeground(C_ON_SURFACE);
-        JLabel userRole = new JLabel("Cardiologist");
+        JLabel userRole = new JLabel("Spesialis Jantung");
         userRole.setFont(F_LABEL_SM);
         userRole.setForeground(C_ON_SURFACE_VAR);
         userInfo.add(userName);
@@ -332,7 +352,7 @@ public class ClinicaSyncDashboard extends JFrame {
     private JScrollPane buildDashboard() {
         JPanel content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-        content.setBackground(C_BACKGROUND);
+        content.setOpaque(false);
         content.setBorder(BorderFactory.createEmptyBorder(28, 28, 28, 28));
 
         // 1. Welcome + Call Next
@@ -347,6 +367,8 @@ public class ClinicaSyncDashboard extends JFrame {
         content.add(buildMainGrid());
 
         JScrollPane scroll = new JScrollPane(content);
+        scroll.setOpaque(false);
+        scroll.getViewport().setOpaque(false);
         scroll.setBorder(BorderFactory.createEmptyBorder());
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.getVerticalScrollBar().setUnitIncrement(14);
@@ -362,10 +384,10 @@ public class ClinicaSyncDashboard extends JFrame {
         JPanel textBlock = new JPanel();
         textBlock.setOpaque(false);
         textBlock.setLayout(new BoxLayout(textBlock, BoxLayout.Y_AXIS));
-        JLabel greeting = new JLabel("Good Morning, Dr. Moore 👋");
+        JLabel greeting = new JLabel("Selamat Pagi, Dr. Moore 👋");
         greeting.setFont(F_HEADLINE_LG);
         greeting.setForeground(C_ON_SURFACE);
-        JLabel subtext = new JLabel("You have 12 patients remaining in today's queue.");
+        JLabel subtext = new JLabel("Terdapat 12 pasien tersisa di dalam antrean hari ini.");
         subtext.setFont(F_BODY_MD);
         subtext.setForeground(C_ON_SURFACE_VAR);
         textBlock.add(greeting);
@@ -398,10 +420,10 @@ public class ClinicaSyncDashboard extends JFrame {
         JPanel btnText = new JPanel();
         btnText.setOpaque(false);
         btnText.setLayout(new BoxLayout(btnText, BoxLayout.Y_AXIS));
-        JLabel nextLabel  = new JLabel("NEXT IN QUEUE");
+        JLabel nextLabel  = new JLabel("ANTREAN BERIKUTNYA");
         nextLabel.setFont(new Font(F_LABEL_SM.getFamily(), Font.PLAIN, 10));
         nextLabel.setForeground(new Color(C_ON_PRIMARY_CONT.getRed(), C_ON_PRIMARY_CONT.getGreen(), C_ON_PRIMARY_CONT.getBlue(), 180));
-        JLabel callLabel  = new JLabel("Call Next Patient");
+        JLabel callLabel  = new JLabel("Panggil Pasien");
         callLabel.setFont(new Font(F_HEADLINE_MD.getFamily(), Font.BOLD, 16));
         callLabel.setForeground(C_ON_PRIMARY_CONT);
         btnText.add(nextLabel);
@@ -410,8 +432,8 @@ public class ClinicaSyncDashboard extends JFrame {
         callNext.add(arrow);
         callNext.add(btnText);
         callNext.addActionListener(e -> JOptionPane.showMessageDialog(this,
-            "📢  Memanggil pasien berikutnya...\n\nSarah Connor — Nomor Antrian #01",
-            "Call Next Patient", JOptionPane.INFORMATION_MESSAGE));
+            "📢  Memanggil pasien berikutnya...\n\nSarah Connor — Nomor Antrean #01",
+            "Panggil Pasien", JOptionPane.INFORMATION_MESSAGE));
 
         row.add(textBlock, BorderLayout.WEST);
         row.add(callNext, BorderLayout.EAST);
@@ -424,9 +446,9 @@ public class ClinicaSyncDashboard extends JFrame {
         grid.setOpaque(false);
         grid.setMaximumSize(new Dimension(Integer.MAX_VALUE, 96));
 
-        grid.add(buildMetricCard("👥", "Total Patients Today",     "34", C_SECONDARY_CONT,    C_SECONDARY));
-        grid.add(buildMetricCard("📋", "Pending Prescriptions",    "08", C_TERTIARY_CONT,     C_TERTIARY));
-        grid.add(buildMetricCard("📅", "Upcoming Appointments",    "12", C_PRIMARY_CONT,      C_PRIMARY));
+        grid.add(buildMetricCard("👥", "Total Pasien Hari Ini",     "34", C_SECONDARY_CONT,    C_SECONDARY));
+        grid.add(buildMetricCard("📋", "Resep Tertunda",             "08", C_TERTIARY_CONT,     C_TERTIARY));
+        grid.add(buildMetricCard("📅", "Janji Temu Mendatang",       "12", C_PRIMARY_CONT,      C_PRIMARY));
         return grid;
     }
 
@@ -499,10 +521,10 @@ public class ClinicaSyncDashboard extends JFrame {
         JPanel header = new JPanel(new BorderLayout());
         header.setOpaque(false);
         header.setBorder(new CompoundBorder(
-            new MatteBorder(0, 0, 1, 0, C_OUTLINE_VAR),
+            new MatteBorder(0, 0, 1, 0, new Color(255, 255, 255, 120)),
             BorderFactory.createEmptyBorder(14, 18, 14, 18)
         ));
-        JLabel title = new JLabel("📋  Real-time Queue Monitor");
+        JLabel title = new JLabel("📋  Pemantau Antrean Real-Time");
         title.setFont(new Font(F_HEADLINE_MD.getFamily(), Font.BOLD, 16));
         title.setForeground(C_ON_SURFACE);
 
@@ -512,7 +534,7 @@ public class ClinicaSyncDashboard extends JFrame {
         JLabel liveDot = new JLabel("●");
         liveDot.setFont(new Font("SansSerif", Font.PLAIN, 11));
         liveDot.setForeground(C_TERTIARY);
-        JLabel liveTxt = new JLabel("Live Syncing");
+        JLabel liveTxt = new JLabel("Sinkronisasi Langsung");
         liveTxt.setFont(F_LABEL_SM);
         liveTxt.setForeground(C_ON_SURFACE_VAR);
         liveTag.add(liveDot);
@@ -529,18 +551,18 @@ public class ClinicaSyncDashboard extends JFrame {
         card.add(header, BorderLayout.NORTH);
 
         // Table
-        String[] columns = {"Pos", "Patient Name", "Check-in", "Est. Wait", "Status"};
+        String[] columns = {"No.", "Nama Pasien", "Waktu Masuk", "Estimasi Tunggu", "Status"};
         Object[][] data = {
-            {"#01", "Sarah Connor",  "08:45 AM", "0 mins",   "Ready"},
-            {"#02", "James Smith",   "08:52 AM", "12 mins",  "Arrived"},
-            {"#03", "Ellen Ripley",  "09:10 AM", "25 mins",  "Waiting"},
-            {"#04", "Max Mad",       "09:15 AM", "40 mins",  "Waiting"},
+            {"#01", "Sarah Connor",  "08:45 AM", "0 menit",   "Siap"},
+            {"#02", "James Smith",   "08:52 AM", "12 menit",  "Tiba"},
+            {"#03", "Ellen Ripley",  "09:10 AM", "25 menit",  "Menunggu"},
+            {"#04", "Max Mad",       "09:15 AM", "40 menit",  "Menunggu"},
         };
         JTable table = new JTable(data, columns) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
             @Override public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
                 Component comp = super.prepareRenderer(renderer, row, col);
-                comp.setBackground(isRowSelected(row) ? C_SURFACE_HIGH : C_SURFACE_LOWEST);
+                comp.setBackground(isRowSelected(row) ? new Color(255, 255, 255, 200) : new Color(255, 255, 255, 100));
                 comp.setForeground(C_ON_SURFACE);
                 return comp;
             }
@@ -549,11 +571,12 @@ public class ClinicaSyncDashboard extends JFrame {
         table.setRowHeight(46);
         table.setShowGrid(false);
         table.setIntercellSpacing(new Dimension(0, 0));
-        table.setBackground(C_SURFACE_LOWEST);
+        table.setBackground(new Color(255, 255, 255, 100));
+        table.setOpaque(false);
         table.setFillsViewportHeight(true);
-        table.setSelectionBackground(C_SURFACE_HIGH);
+        table.setSelectionBackground(new Color(255, 255, 255, 200));
         table.getTableHeader().setFont(new Font(F_LABEL_SM.getFamily(), Font.BOLD, 11));
-        table.getTableHeader().setBackground(C_SURFACE_CONT_LOW);
+        table.getTableHeader().setBackground(new Color(255, 255, 255, 160));
         table.getTableHeader().setForeground(C_ON_SURFACE_VAR);
         table.getTableHeader().setBorder(BorderFactory.createEmptyBorder(6, 0, 6, 0));
 
@@ -568,16 +591,16 @@ public class ClinicaSyncDashboard extends JFrame {
                 badge.setOpaque(true);
                 String status = val.toString();
                 switch (status) {
-                    case "Ready":
+                    case "Siap":
                         badge.setBackground(new Color(C_TERTIARY_CONT.getRed(), C_TERTIARY_CONT.getGreen(), C_TERTIARY_CONT.getBlue(), 50));
                         badge.setForeground(C_ON_TERTIARY_CONT);
                         break;
-                    case "Arrived":
+                    case "Tiba":
                         badge.setBackground(new Color(C_SECONDARY_CONT.getRed(), C_SECONDARY_CONT.getGreen(), C_SECONDARY_CONT.getBlue(), 60));
                         badge.setForeground(C_ON_SECONDARY_CONT);
                         break;
                     default:
-                        badge.setBackground(new Color(C_SURFACE_CONT.getRed(), C_SURFACE_CONT.getGreen(), C_SURFACE_CONT.getBlue(), 120));
+                        badge.setBackground(new Color(180, 180, 180, 80));
                         badge.setForeground(C_ON_SURFACE_VAR);
                 }
                 JPanel wrap = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
@@ -600,26 +623,29 @@ public class ClinicaSyncDashboard extends JFrame {
 
         JScrollPane tableScroll = new JScrollPane(table);
         tableScroll.setBorder(BorderFactory.createEmptyBorder());
-        tableScroll.getViewport().setBackground(C_SURFACE_LOWEST);
+        tableScroll.setOpaque(false);
+        tableScroll.getViewport().setOpaque(false);
+        tableScroll.getViewport().setBackground(new Color(255, 255, 255, 100));
         card.add(tableScroll, BorderLayout.CENTER);
 
         // Footer button
-        JButton viewFull = new JButton("View Full Queue");
+        JButton viewFull = new JButton("Lihat Semua Antrean");
         viewFull.setFont(F_LABEL_MD);
         viewFull.setForeground(C_PRIMARY);
-        viewFull.setBackground(C_SURFACE_LOWEST);
+        viewFull.setOpaque(false);
+        viewFull.setContentAreaFilled(false);
         viewFull.setBorderPainted(false);
         viewFull.setFocusPainted(false);
         viewFull.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         viewFull.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         viewFull.addMouseListener(new MouseAdapter() {
-            @Override public void mouseEntered(MouseEvent e) { viewFull.setBackground(new Color(C_PRIMARY_CONT.getRed(), C_PRIMARY_CONT.getGreen(), C_PRIMARY_CONT.getBlue(), 30)); }
-            @Override public void mouseExited (MouseEvent e) { viewFull.setBackground(C_SURFACE_LOWEST); }
+            @Override public void mouseEntered(MouseEvent e) { viewFull.setBackground(new Color(C_PRIMARY_CONT.getRed(), C_PRIMARY_CONT.getGreen(), C_PRIMARY_CONT.getBlue(), 30)); viewFull.setContentAreaFilled(true); }
+            @Override public void mouseExited (MouseEvent e) { viewFull.setContentAreaFilled(false); }
         });
 
         JPanel footer = new JPanel(new BorderLayout());
-        footer.setBackground(C_SURFACE_LOWEST);
-        footer.setBorder(new MatteBorder(1, 0, 0, 0, C_OUTLINE_VAR));
+        footer.setOpaque(false);
+        footer.setBorder(new MatteBorder(1, 0, 0, 0, new Color(255, 255, 255, 120)));
         footer.add(viewFull, BorderLayout.CENTER);
         card.add(footer, BorderLayout.SOUTH);
         return card;
@@ -645,7 +671,7 @@ public class ClinicaSyncDashboard extends JFrame {
         // Header row
         JPanel hdr = new JPanel(new BorderLayout());
         hdr.setOpaque(false);
-        JLabel title = new JLabel("CURRENTLY IN CONSULT");
+        JLabel title = new JLabel("SEDANG DALAM KONSULTASI");
         title.setFont(new Font(F_LABEL_SM.getFamily(), Font.BOLD, 11));
         title.setForeground(C_ON_SURFACE);
         JLabel verified = new JLabel("✓");
@@ -696,17 +722,17 @@ public class ClinicaSyncDashboard extends JFrame {
         card.add(Box.createVerticalStrut(12));
 
         // Details
-        card.add(buildDetailRow("Condition:", "Stable - Post Op"));
+        card.add(buildDetailRow("Kondisi:", "Stabil - Pasca Operasi"));
         card.add(Box.createVerticalStrut(6));
-        card.add(buildDetailRow("Duration:",  "12:45 min"));
+        card.add(buildDetailRow("Durasi:",  "12:45 menit"));
         card.add(Box.createVerticalStrut(14));
 
         // Action buttons
         JPanel btns = new JPanel(new GridLayout(1, 2, 8, 0));
         btns.setOpaque(false);
         btns.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
-        btns.add(createOutlineButton("Lab Results"));
-        btns.add(createOutlineButton("EHR File"));
+        btns.add(createOutlineButton("Hasil Lab"));
+        btns.add(createOutlineButton("Berkas RME"));
         card.add(btns);
         return card;
     }
@@ -720,7 +746,7 @@ public class ClinicaSyncDashboard extends JFrame {
         k.setForeground(C_ON_SURFACE_VAR);
         JLabel v = new JLabel(value);
         v.setFont(new Font(F_BODY_SM.getFamily(), Font.BOLD, 12));
-        v.setForeground(key.contains("Duration") ? C_PRIMARY : C_ON_SURFACE);
+        v.setForeground(key.contains("Durasi") ? C_PRIMARY : C_ON_SURFACE);
         row.add(k, BorderLayout.WEST);
         row.add(v, BorderLayout.EAST);
         return row;
@@ -731,7 +757,7 @@ public class ClinicaSyncDashboard extends JFrame {
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         card.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
 
-        JLabel title = new JLabel("⚠  URGENT LAB REPORTS");
+        JLabel title = new JLabel("⚠  LAPORAN LABORATORIUM DARURAT");
         title.setFont(new Font(F_LABEL_SM.getFamily(), Font.BOLD, 11));
         title.setForeground(C_ON_SURFACE);
         title.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20));
@@ -740,16 +766,16 @@ public class ClinicaSyncDashboard extends JFrame {
 
         // Critical alert
         JPanel critAlert = buildAlert(true,
-            "Critical: Thomas Shelby",
-            "Abnormal Hemoglobin level. Immediate review required.");
+            "Kritis: Thomas Shelby",
+            "Kadar Hemoglobin abnormal. Diperlukan peninjauan segera.");
         critAlert.setMaximumSize(new Dimension(Integer.MAX_VALUE, 72));
         card.add(critAlert);
         card.add(Box.createVerticalStrut(10));
 
         // Info alert
         JPanel infoAlert = buildAlert(false,
-            "Update: Rose Tyler",
-            "Imaging results available for review.");
+            "Pembaruan: Rose Tyler",
+            "Hasil pencitraan medis telah tersedia untuk ditinjau.");
         infoAlert.setMaximumSize(new Dimension(Integer.MAX_VALUE, 62));
         card.add(infoAlert);
         return card;
@@ -893,12 +919,13 @@ public class ClinicaSyncDashboard extends JFrame {
         // Messages area
         JPanel messages = new JPanel();
         messages.setLayout(new BoxLayout(messages, BoxLayout.Y_AXIS));
-        messages.setBackground(C_SURFACE_LOWEST);
+        messages.setBackground(new Color(255, 255, 255, 100)); // Transparent chat background
+        messages.setOpaque(false);
         messages.setBorder(BorderFactory.createEmptyBorder(12, 10, 12, 10));
 
-        addChatBubble(messages, "Hello Dr. Moore. I've analyzed Amelia Pond's recent vitals. Would you like a summary?", false);
-        addChatBubble(messages, "Yes, please. Also check if there are any contraindications for her new meds.", true);
-        addChatBubble(messages, "Checking... No known contraindications found with current profile.", false);
+        addChatBubble(messages, "Halo Dr. Moore. Saya telah menganalisis tanda-tanda vital terbaru Amelia Pond. Apakah Anda memerlukan ringkasannya?", false);
+        addChatBubble(messages, "Ya, tolong. Periksa juga apakah ada kontraindikasi untuk obat barunya.", true);
+        addChatBubble(messages, "Memeriksa... Tidak ditemukan adanya kontraindikasi dengan profil pasien saat ini.", false);
 
         JScrollPane msgScroll = new JScrollPane(messages);
         msgScroll.setBorder(BorderFactory.createEmptyBorder());
@@ -1069,16 +1096,25 @@ public class ClinicaSyncDashboard extends JFrame {
     // Inner Classes
     // =========================================================
 
-    /** Card bento dengan hover shadow */
+    /** Card bento dengan hover shadow dan efek glassmorphism */
     static class BentoCard extends JPanel {
         BentoCard() {
-            setBackground(Color.WHITE);
-            setBorder(new LineBorder(new Color(0xDE, 0xE2, 0xE6), 1, true));
-            setOpaque(true);
+            setOpaque(false);
+            setBackground(new Color(255, 255, 255, 130)); // Frosty glass
+            setBorder(new RoundedBorder(new Color(255, 255, 255, 180), 1, 14));
             addMouseListener(new MouseAdapter() {
-                @Override public void mouseEntered(MouseEvent e) { setBorder(new ShadowBorder()); }
-                @Override public void mouseExited (MouseEvent e) { setBorder(new LineBorder(new Color(0xDE, 0xE2, 0xE6), 1, true)); }
+                @Override public void mouseEntered(MouseEvent e) { setBorder(new GlassShadowBorder()); }
+                @Override public void mouseExited (MouseEvent e) { setBorder(new RoundedBorder(new Color(255, 255, 255, 180), 1, 14)); }
             });
+        }
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(getBackground());
+            g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+            g2.dispose();
+            super.paintComponent(g);
         }
     }
 
@@ -1100,18 +1136,71 @@ public class ClinicaSyncDashboard extends JFrame {
         @Override public Insets getBorderInsets(Component c) { return new Insets(thickness + 2, thickness + 2, thickness + 2, thickness + 2); }
     }
 
-    /** Shadow border sederhana untuk hover effect */
-    static class ShadowBorder extends AbstractBorder {
-        @Override public void paintBorder(Component c, Graphics g, int x, int y, int w, int h) {
+    /** Border bayangan kustom untuk efek glassmorphism */
+    static class GlassShadowBorder extends AbstractBorder {
+        @Override
+        public void paintBorder(Component c, Graphics g, int x, int y, int w, int h) {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setColor(new Color(0, 0, 0, 18));
+            
+            // Paint shadow
+            g2.setColor(new Color(0, 0, 0, 12));
             for (int i = 0; i < 4; i++) {
-                g2.drawRoundRect(x + i, y + i, w - i * 2 - 1, h - i * 2 - 1, 12, 12);
+                g2.drawRoundRect(x + i, y + i, w - i * 2 - 1, h - i * 2 - 1, 14, 14);
+            }
+            
+            // Paint glass outline
+            g2.setColor(new Color(255, 255, 255, 220));
+            g2.setStroke(new BasicStroke(1.2f));
+            g2.drawRoundRect(x, y, w - 1, h - 1, 14, 14);
+            g2.dispose();
+        }
+        @Override
+        public Insets getBorderInsets(Component c) {
+            return new Insets(4, 4, 4, 4);
+        }
+    }
+
+    /** Background Panel dengan Efek Cairan/Fluid Gradasi Terang (Mesh Gradient Style) */
+    static class FluidBackgroundPanel extends JPanel {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            // Base Background
+            g2.setColor(new Color(0xf0, 0xf4, 0xf8));
+            g2.fillRect(0, 0, getWidth(), getHeight());
+
+            // Fluid Blob 1 (Top Left - Pink/Red Container)
+            Color c1 = new Color(0xf6, 0x72, 0x80, 90);
+            RadialGradientPaint rgb1 = new RadialGradientPaint(
+                new Point(getWidth() / 4, getHeight() / 4), getWidth() / 2f,
+                new float[]{0f, 1f}, new Color[]{c1, new Color(255,255,255,0)}
+            );
+            g2.setPaint(rgb1);
+            g2.fillOval(-100, -100, getWidth() / 2 + 200, getHeight() / 2 + 200);
+
+            // Fluid Blob 2 (Bottom Right - Blue Cyan Soft)
+            Color c2 = new Color(0xad, 0xbf, 0xfd, 110);
+            RadialGradientPaint rgb2 = new RadialGradientPaint(
+                new Point(getWidth() * 3 / 4, getHeight() * 3 / 4), getWidth() / 2f,
+                new float[]{0f, 1f}, new Color[]{c2, new Color(255,255,255,0)}
+            );
+            g2.setPaint(rgb2);
+            g2.fillOval(getWidth() / 2 - 100, getHeight() / 2 - 100, getWidth() / 2 + 200, getHeight() / 2 + 200);
+
+            // Dot Pattern Overlay semitransparan
+            g2.setColor(new Color(0xDE, 0xE2, 0xE6, 80));
+            int step = 24;
+            for (int x = 0; x < getWidth(); x += step) {
+                for (int y = 0; y < getHeight(); y += step) {
+                    g2.fillOval(x - 1, y - 1, 2, 2);
+                }
             }
             g2.dispose();
         }
-        @Override public Insets getBorderInsets(Component c) { return new Insets(4, 4, 4, 4); }
     }
 
     // =========================================================
