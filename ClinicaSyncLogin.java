@@ -142,18 +142,13 @@ public class ClinicaSyncLogin extends JFrame {
         panel.add(Box.createVerticalStrut(12));
 
         // Subtitle
-        JTextArea subtitle = new JTextArea(
-            "Mengelola layanan kesehatan dengan presisi.\nPlatform sinkronisasi medis terintegrasi."
+        JLabel subtitle = new JLabel(
+            "<html><center>Mengelola layanan kesehatan dengan presisi.<br>Platform sinkronisasi medis terintegrasi.</center></html>",
+            SwingConstants.CENTER
         );
         subtitle.setFont(fontBodyMd);
         subtitle.setForeground(COLOR_ON_SURFACE_VAR);
-        subtitle.setOpaque(false);
-        subtitle.setEditable(false);
-        subtitle.setFocusable(false);
-        subtitle.setWrapStyleWord(true);
-        subtitle.setLineWrap(true);
         subtitle.setAlignmentX(Component.CENTER_ALIGNMENT);
-        subtitle.setMaximumSize(new Dimension(280, 80));
         panel.add(subtitle);
         panel.add(Box.createVerticalStrut(32));
 
