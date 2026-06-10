@@ -143,7 +143,7 @@ public class ClinicaSyncLogin extends JFrame {
 
         // Subtitle
         JTextArea subtitle = new JTextArea(
-            "Mengelola layanan kesehatan dengan presisi.\nPlatform sinkronisasi medis all-in-one Anda."
+            "Mengelola layanan kesehatan dengan presisi.\nPlatform sinkronisasi medis terintegrasi."
         );
         subtitle.setFont(fontBodyMd);
         subtitle.setForeground(COLOR_ON_SURFACE_VAR);
@@ -159,8 +159,8 @@ public class ClinicaSyncLogin extends JFrame {
 
         // Info cards
         String[][] features = {
-            {"🔒", "Standar HIPAA", "Data terenkripsi end-to-end"},
-            {"📋", "Sinkronisasi Real-time",  "Pembaruan rekam medis pasien langsung"},
+            {"🔒", "Kepatuhan HIPAA", "Data terenkripsi secara end-to-end"},
+            {"📋", "Sinkronisasi Real-time",  "Pembaruan rekam medis pasien secara langsung"},
             {"👥", "Multi-Peran",      "Admin, Dokter, Perawat, Apoteker"}
         };
         for (String[] f : features) {
@@ -213,7 +213,7 @@ public class ClinicaSyncLogin extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(40, 44, 32, 44));
 
         // Header
-        JLabel welcome = new JLabel("Selamat datang kembali");
+        JLabel welcome = new JLabel("Selamat Datang Kembali");
         welcome.setFont(new Font(fontHeadlineLg.getFamily(), Font.BOLD, 26));
         welcome.setForeground(COLOR_ON_SURFACE);
         welcome.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -256,7 +256,7 @@ public class ClinicaSyncLogin extends JFrame {
         panel.add(Box.createVerticalStrut(14));
 
         // Remember me
-        rememberCheckbox = new JCheckBox("Tetap masuk selama 30 hari");
+        rememberCheckbox = new JCheckBox("Pertahankan sesi masuk selama 30 hari");
         rememberCheckbox.setFont(fontBodySm);
         rememberCheckbox.setForeground(COLOR_ON_SURFACE_VAR);
         rememberCheckbox.setOpaque(false);
@@ -279,7 +279,7 @@ public class ClinicaSyncLogin extends JFrame {
 
         // Footer
         JLabel footer = new JLabel(
-            "<html><center><span style='color:#574142;'>Belum punya akun? </span>" +
+            "<html><center><span style='color:#574142;'>Belum memiliki akun? </span>" +
             "<a href='#' style='color:#a73646;font-weight:bold;'>Hubungi Administrator Sistem</a></center></html>"
         );
         footer.setFont(fontBodySm);
@@ -520,7 +520,7 @@ public class ClinicaSyncLogin extends JFrame {
         String role     = getSelectedRole();
 
         if (email.isEmpty() || !email.contains("@") || password.isEmpty() || password.length() < 6) {
-            showError("Kredensial tidak valid. Silakan periksa kembali.");
+            showError("Kredensial yang Anda masukkan tidak valid. Silakan periksa kembali.");
             return;
         }
 
@@ -530,7 +530,7 @@ public class ClinicaSyncLogin extends JFrame {
         Timer timer = new Timer(1500, evt -> {
             loginButton.setEnabled(true);
             loginButton.setText("Masuk ke ClinicaSync  →");
-            JOptionPane.showMessageDialog(this, "✅  Login berhasil!\nPeran: " + role, "Sukses", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "✅  Autentikasi berhasil!\nPeran: " + role, "Sukses", JOptionPane.INFORMATION_MESSAGE);
         });
         timer.setRepeats(false);
         timer.start();
