@@ -245,6 +245,7 @@ public class ClinicaSyncLogin extends JFrame {
         JPanel passHeader = new JPanel(new BorderLayout());
         passHeader.setOpaque(false);
         passHeader.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20));
+        passHeader.setAlignmentX(Component.LEFT_ALIGNMENT);
         passHeader.add(buildSectionLabel("Kata Sandi"), BorderLayout.WEST);
         JLabel forgot = new JLabel("<html><a href='#' style='color:#a73646;'>Lupa Kata Sandi?</a></html>");
         forgot.setFont(fontLabelSm);
@@ -274,6 +275,7 @@ public class ClinicaSyncLogin extends JFrame {
         JSeparator sep = new JSeparator();
         sep.setForeground(new Color(255,255,255,100));
         sep.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
+        sep.setAlignmentX(Component.LEFT_ALIGNMENT);
         panel.add(sep);
         panel.add(Box.createVerticalStrut(14));
 
