@@ -73,7 +73,7 @@ public class ClinicaSyncLogin extends JFrame {
     }
 
     private void initUI() {
-        setTitle("Login | ClinicaSync");
+        setTitle("Masuk | ClinicaSync");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setMinimumSize(new Dimension(950, 620));
         setPreferredSize(new Dimension(1100, 680));
@@ -143,7 +143,7 @@ public class ClinicaSyncLogin extends JFrame {
 
         // Subtitle
         JTextArea subtitle = new JTextArea(
-            "Orchestrating care with precision.\nYour all-in-one medical synchronization platform."
+            "Mengelola layanan kesehatan dengan presisi.\nPlatform sinkronisasi medis all-in-one Anda."
         );
         subtitle.setFont(fontBodyMd);
         subtitle.setForeground(COLOR_ON_SURFACE_VAR);
@@ -159,9 +159,9 @@ public class ClinicaSyncLogin extends JFrame {
 
         // Info cards
         String[][] features = {
-            {"🔒", "HIPAA Compliant", "End-to-end encrypted data"},
-            {"📋", "Real-time Sync",  "Live patient record updates"},
-            {"👥", "Multi-Role",      "Admin, Doctor, Nurse, Pharmacist"}
+            {"🔒", "Standar HIPAA", "Data terenkripsi end-to-end"},
+            {"📋", "Sinkronisasi Real-time",  "Pembaruan rekam medis pasien langsung"},
+            {"👥", "Multi-Peran",      "Admin, Dokter, Perawat, Apoteker"}
         };
         for (String[] f : features) {
             panel.add(buildFeatureRow(f[0], f[1], f[2]));
@@ -213,14 +213,14 @@ public class ClinicaSyncLogin extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(40, 44, 32, 44));
 
         // Header
-        JLabel welcome = new JLabel("Welcome back");
+        JLabel welcome = new JLabel("Selamat datang kembali");
         welcome.setFont(new Font(fontHeadlineLg.getFamily(), Font.BOLD, 26));
         welcome.setForeground(COLOR_ON_SURFACE);
         welcome.setAlignmentX(Component.LEFT_ALIGNMENT);
         panel.add(welcome);
         panel.add(Box.createVerticalStrut(4));
 
-        JLabel sub = new JLabel("Please enter your credentials to access the dashboard.");
+        JLabel sub = new JLabel("Silakan masukkan kredensial Anda untuk mengakses dasbor.");
         sub.setFont(fontBodySm);
         sub.setForeground(COLOR_ON_SURFACE_VAR);
         sub.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -228,13 +228,13 @@ public class ClinicaSyncLogin extends JFrame {
         panel.add(Box.createVerticalStrut(22));
 
         // Role Selection
-        panel.add(buildSectionLabel("Select Your Role"));
+        panel.add(buildSectionLabel("Pilih Peran Anda"));
         panel.add(Box.createVerticalStrut(8));
         panel.add(buildRoleSelector());
         panel.add(Box.createVerticalStrut(16));
 
         // Email
-        panel.add(buildSectionLabel("Email Address"));
+        panel.add(buildSectionLabel("Alamat Email"));
         panel.add(Box.createVerticalStrut(6));
         emailField = buildStyledTextField("dr.smith@clinicasync.com", "✉");
         emailField.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -245,8 +245,8 @@ public class ClinicaSyncLogin extends JFrame {
         JPanel passHeader = new JPanel(new BorderLayout());
         passHeader.setOpaque(false);
         passHeader.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20));
-        passHeader.add(buildSectionLabel("Password"), BorderLayout.WEST);
-        JLabel forgot = new JLabel("<html><a href='#' style='color:#a73646;'>Forgot Password?</a></html>");
+        passHeader.add(buildSectionLabel("Kata Sandi"), BorderLayout.WEST);
+        JLabel forgot = new JLabel("<html><a href='#' style='color:#a73646;'>Lupa Kata Sandi?</a></html>");
         forgot.setFont(fontLabelSm);
         forgot.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         passHeader.add(forgot, BorderLayout.EAST);
@@ -256,7 +256,7 @@ public class ClinicaSyncLogin extends JFrame {
         panel.add(Box.createVerticalStrut(14));
 
         // Remember me
-        rememberCheckbox = new JCheckBox("Keep me logged in for 30 days");
+        rememberCheckbox = new JCheckBox("Tetap masuk selama 30 hari");
         rememberCheckbox.setFont(fontBodySm);
         rememberCheckbox.setForeground(COLOR_ON_SURFACE_VAR);
         rememberCheckbox.setOpaque(false);
@@ -279,15 +279,15 @@ public class ClinicaSyncLogin extends JFrame {
 
         // Footer
         JLabel footer = new JLabel(
-            "<html><center><span style='color:#574142;'>Don't have an account? </span>" +
-            "<a href='#' style='color:#a73646;font-weight:bold;'>Contact System Administrator</a></center></html>"
+            "<html><center><span style='color:#574142;'>Belum punya akun? </span>" +
+            "<a href='#' style='color:#a73646;font-weight:bold;'>Hubungi Administrator Sistem</a></center></html>"
         );
         footer.setFont(fontBodySm);
         footer.setAlignmentX(Component.LEFT_ALIGNMENT);
         panel.add(footer);
 
         panel.add(Box.createVerticalStrut(10));
-        JLabel status = new JLabel("🔒  HIPAA Compliant  •  256-bit TLS Encryption  •  © 2026 ClinicaSync");
+        JLabel status = new JLabel("🔒  Sesuai Standar HIPAA  •  Enkripsi TLS 256-bit  •  © 2026 ClinicaSync");
         status.setFont(new Font(fontBodySm.getFamily(), Font.PLAIN, 10));
         status.setForeground(new Color(0x8a, 0x71, 0x72));
         status.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -316,9 +316,9 @@ public class ClinicaSyncLogin extends JFrame {
         roleGroup = new ButtonGroup();
         String[][] roles = {
             {"⚙", "Admin"},
-            {"🩺", "Doctor"},
-            {"💊", "Nurse"},
-            {"💉", "Pharmacist"}
+            {"🩺", "Dokter"},
+            {"💊", "Perawat"},
+            {"💉", "Apoteker"}
         };
         roleButtons = new JToggleButton[roles.length];
         for (int i = 0; i < roles.length; i++) {
@@ -484,7 +484,7 @@ public class ClinicaSyncLogin extends JFrame {
     // Login Button
     // =========================================================
     private JButton buildLoginButton() {
-        JButton btn = new JButton("Login to ClinicaSync  →") {
+        JButton btn = new JButton("Masuk ke ClinicaSync  →") {
             @Override protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -525,19 +525,19 @@ public class ClinicaSyncLogin extends JFrame {
         }
 
         loginButton.setEnabled(false);
-        loginButton.setText("⏳  Authenticating...");
+        loginButton.setText("⏳  Mengautentikasi...");
 
         Timer timer = new Timer(1500, evt -> {
             loginButton.setEnabled(true);
-            loginButton.setText("Login to ClinicaSync  →");
-            JOptionPane.showMessageDialog(this, "✅  Login berhasil!\nRole: " + role, "Sukses", JOptionPane.INFORMATION_MESSAGE);
+            loginButton.setText("Masuk ke ClinicaSync  →");
+            JOptionPane.showMessageDialog(this, "✅  Login berhasil!\nPeran: " + role, "Sukses", JOptionPane.INFORMATION_MESSAGE);
         });
         timer.setRepeats(false);
         timer.start();
     }
 
     private String getSelectedRole() {
-        String[] roleNames = {"Admin", "Doctor", "Nurse", "Pharmacist"};
+        String[] roleNames = {"Admin", "Dokter", "Perawat", "Apoteker"};
         for (int i = 0; i < roleButtons.length; i++) {
             if (roleButtons[i].isSelected()) return roleNames[i];
         }
